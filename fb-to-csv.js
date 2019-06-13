@@ -1,4 +1,4 @@
-// Script to convert LinkedIn contacts to a csv file that Anki can load.
+// Script to convert Facebook friends to a csv file that Anki can load.
 // 1. Go to https://www.facebook.com/me/friends
 // 2. Scoll down and down and down until all friends are loaded appear.
 // 3. Press Command+Option-J to open console. (Ctrl-Alt-J on Windows)
@@ -68,9 +68,11 @@ Promise.all(friendPromises).then((friendsData) => {
     }).join("\n");
     console.save(friendsHtmlCsv, "fb-friends-basic-card.csv")
 
-    // Data in plain csv/tsv form, for use with custom cards
+    // Advanced: Data in plain csv/tsv form, for use with custom cards
+    /*
     friendsDataCsv = friendsData.map((friendData, idx) => {
         return `${friendData.name}\t${friendData.profileUrl}\t${friendData.imageDataUri}`
     }).join("\n");
     console.save(friendsDataCsv, "fb-friends-data.csv")
+    */
 })
