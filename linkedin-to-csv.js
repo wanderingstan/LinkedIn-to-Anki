@@ -10,6 +10,10 @@
 // 9. Select deck type of "Basic" or "Basic and Reverved Card"
 // 10. Click "Import"
 
+// Change this to false if you'd rather have raw fields exported and
+// create your own card type.
+var exportPreformatted = true
+
 // Function to download data as a file
 (function(console){
     console.save = function(data, filename){
@@ -32,9 +36,11 @@
     }
 })(console)
 // Get names, occumations, photoTags
-names = [...document.querySelectorAll('.mn-connection-card__name')].map(x=>x.innerHTML.trim())
-occupations = [...document.querySelectorAll('.mn-connection-card__occupation')].map(x=>x.innerHTML.trim())
-photoTags = [...document.querySelectorAll('.lazy-image.presence-entity__image.EntityPhoto-circle-5')]
+const names = [...document.querySelectorAll('.mn-connection-card__name')].map(x=>x.innerHTML.trim())
+const occupations = [...document.querySelectorAll('.mn-connection-card__occupation')].map(x=>x.innerHTML.trim())
+const photoTags = [...document.querySelectorAll('.lazy-image.presence-entity__image.EntityPhoto-circle-5')]
+const profileUrls = [...document.querySelectorAll('.mn-connection-card__details a')].map(x=>x.href)
+
 // Func to turn photo urls into data URI's (That don't need internet connection)
 function getDataUri(url, callback) {
     return new Promise(resolve => {
@@ -63,10 +69,22 @@ photoPromises=photoTags.map(
 // Wait for photos and then combine all together and download
 Promise.all(photoPromises).then((dataUriArray) => {
     const photos = dataUriArray
-    allArray = names.map((name,idx)=>{
-        // Must use backgrond image because anki tries to change host of img tag
-        return `<div style="width:150px;height:150px;background-image:url(${photos[idx]})"> </div>\t<h1>${name}</h1><p>${occupations[idx]}</p>`
-    });
-    const csv=allArray.join("\n")
-    console.save(csv,"contacts.csv")
+    const isoDate = (new Date()).toISOString().slice(0, 10)
+    if (exportPreformatted===true) {
+        // Data in formatted HTML, for using Anki "Basic Card"
+        allArray = names.map((name,idx)=>{
+            // Must use backgrond image because anki tries to change host of img tag
+            return `<div style="width:150px;height:150px;background-image:url(${photos[idx]})"> </div>\t<h1><a href="${profileUrls[idx]}">${name}</a></h1><p>${occupations[idx]}</p>`
+        });
+        const csv=allArray.join("\n")
+        console.save(csv, `linkedin-contacts-basic-card-${isoDate}.csv`)
+    }
+    else {
+        // Advanced: Data in plain csv/tsv form, for use with custom cards
+        allDataArray = names.map((name, idx) => {
+            return `${profileUrls[idx]}\t${name}\t${photos[idx]}\t${occupations[idx]}`
+        });
+        const dataCsv = allDataArray.join("\n")
+        console.save(dataCsv, `linkedin-contacts-data-${isoDate}.csv`)
+    }
 })

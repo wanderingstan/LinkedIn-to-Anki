@@ -10,6 +10,10 @@
 // 9. Select deck type of "Basic" or "Basic and Reverved Card"
 // 10. Click "Import"
 
+// Change this to false if you'd rather have raw fields exported and
+// create your own card type.
+var exportPreformatted = true;
+
 // Function to download data as a file
 (function(console){
     console.save = function(data, filename){
@@ -61,18 +65,21 @@ friendPromises = [...document.querySelectorAll('._698')].map(async (friendDiv) =
 })
 // Wait for photos and then combine all together and download
 Promise.all(friendPromises).then((friendsData) => {
-    // Data in formatted HTML, for using Anki "Basic Card"
-    friendsHtmlCsv = friendsData.map((friendData, idx) => {
-        // Must use backgrond image because anki tries to change host of img tag
-        return `<h1><a href="${friendData.profileUrl}">${friendData.name}</a></h1>\t<div style="width:150px;height:150px;background-image:url(${friendData.imageDataUri})"> </div>`
-    }).join("\n");
-    console.save(friendsHtmlCsv, "fb-friends-basic-card.csv")
+    const isoDate = (new Date()).toISOString().slice(0, 10)
 
-    // Advanced: Data in plain csv/tsv form, for use with custom cards
-    /*
-    friendsDataCsv = friendsData.map((friendData, idx) => {
-        return `${friendData.name}\t${friendData.profileUrl}\t${friendData.imageDataUri}`
-    }).join("\n");
-    console.save(friendsDataCsv, "fb-friends-data.csv")
-    */
+    if (exportPreformatted) {
+        // Data in formatted HTML, for using Anki "Basic Card"
+        friendsHtmlCsv = friendsData.map((friendData, idx) => {
+            // Must use backgrond image because anki tries to change host of img tag
+            return `<h1><a href="${friendData.profileUrl}">${friendData.name}</a></h1>\t<div style="width:150px;height:150px;background-image:url(${friendData.imageDataUri})"> </div>`
+        }).join("\n");
+        console.save(friendsHtmlCsv, `fb-friends-basic-card-${isoDate}.csv`)
+    }
+    else {
+        // Advanced: Data in plain csv/tsv form, for use with custom cards
+        friendsDataCsv = friendsData.map((friendData, idx) => {
+            return `${friendData.name}\t${friendData.profileUrl}\t${friendData.imageDataUri}`
+        }).join("\n");
+        console.save(friendsDataCsv, `fb-friends-data-${isoDate}.csv`)
+    }
 })
