@@ -6,6 +6,8 @@ Don't you hate it when you're at a business conference or coffee shop and see so
 
 So far only tested on Chrome. Feedback appreciated.
 
+(You may want to keep these instructions open in another tab or window while you do the steps.)
+
 1. Go to https://www.linkedin.com/mynetwork/invite-connect/connections/
 2. Press Command+Option-J to open console. (Ctrl-Alt-J on Windows)
 3. Click in text entry at bottom
