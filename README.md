@@ -4,7 +4,9 @@ Don't you hate it when you're at a business conference or coffee shop and see so
 
 [Anki](https://apps.ankiweb.net/) is an amazing program for remembering things. This script converts your LinkedIn contacts into Anki "cards" that can be learned. 
 
-So far only tested on Chrome. Feedback appreciated.
+What it does is to automatically scroll through your contact page, then extract the name, positions, and photos of your contacts. These are then saved as a tab-separated file that Anki can read. 
+
+So far only tested in Chrome.
 
 (You may want to keep these instructions open in another tab or window while you do the steps.)
 
