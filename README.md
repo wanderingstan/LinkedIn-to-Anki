@@ -4,6 +4,8 @@ Don't you hate it when you're at a business conference or coffee shop and see so
 
 [Anki](https://apps.ankiweb.net/) is an amazing program for remembering things. This script converts your LinkedIn contacts into Anki "cards" that can be learned. 
 
+So far only tested on Chrome. Feedback appreciated.
+
 1. Go to https://www.linkedin.com/mynetwork/invite-connect/connections/
 2. Press Command+Option-J to open console. (Ctrl-Alt-J on Windows)
 3. Click in text entry at bottom
@@ -13,3 +15,13 @@ Don't you hate it when you're at a business conference or coffee shop and see so
 7. Select the "linkedin-contacts-basic-card.csv" file
 8. Select deck type of "Basic" or "Basic and Reverved Card"
 9. Click "Import"
+
+## Geeky details
+
+If you're comfortable creating your own card types, on the first line of code change `exportPreformatted` to be false. Then just the raw data fields are exported. 
+
+LinkedIn doesn't like serving images to strange "browsers", so this script converts the contact's image into a data URI, and stores the image directly in the Anki feild.
+
+Anki tries to be "smart" and re-write image tags, so to show an data URI image, it has to be done as a CSS background image. 
+
+I learned some cool tricks along the way, such as finding a script to download a data file from javascript, and learning how to display an image in the chrome console. 
